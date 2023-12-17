@@ -171,5 +171,5 @@ monitor_and_sync() {
 # Log start of script and check requirements
 log_message "info" "### Start script ${APP_NAME} Version ${VERSION} ###"
 check_requirements
+log_message "info" "### All requirements fulfilled. Start background watcher... ###"
 monitor_and_sync
-cleanup
