@@ -1,5 +1,16 @@
-# Konfiguration der Pfade
+# Systemd service name
 SERVICE_NAME=""
-NEXTCLOUD_DATA_PATH=""
-NEXTCLOUD_PATH=""
-CONTAINER_PATH=""
+LOG_LEVEL="info" # Possible values: info, error, trace
+DOCKER_CONTAINER_NAME="nextcloud-app"
+DOCKER_USERNAME="www-data"
+
+# SYNC_PAIRS Configuration:
+# Each element in the SYNC_PAIRS array consists of three paths separated by semicolons:
+# 1. The base path to the data (combined with the internal Nextcloud path to form the full source path).
+# 2. The internal Nextcloud path (complements the base path to form the full source path).
+# 3. The target synchronization path.
+# Format: (Base path; Internal Nextcloud path) corresponds to Source synchronization path; Target synchronization path
+SYNC_PAIRS=(
+    "/path/to/nextcloud/folder/app/data;/nextcloudUser/files/path/to/source/folder;/path/to/target/folder"
+    # Additional path pairs can be added here in the same format
+)

@@ -1,0 +1,41 @@
+LOG_LEVEL="info" # Default log level setting
+
+# Log messages based on set LOG_LEVEL
+log_message() {
+    local level="$1"
+    local message="$2"
+
+    case "$level" in
+        "trace")
+			if [[ "$LOG_LEVEL" == "trace" ]]; then
+                echo "[TRACE] $message"  # Trace messages are logged normally
+            fi
+            ;;
+		"info")
+			if [[ "$LOG_LEVEL" == "info" || "$LOG_LEVEL" == "trace" ]]; then
+                echo "[INFO] $message"  # Info messages are logged normally
+            fi
+            ;;
+        "error")
+			if [[ "$LOG_LEVEL" == "info" || "$LOG_LEVEL" == "error" || "$LOG_LEVEL" == "trace" ]]; then
+                >&2 echo "[ERROR] $message$"  # Error messages are sent to stderr
+            fi
+            ;;
+    esac
+}
+
+# Colors definition
+#RED=$(tput setaf 1)
+#GREEN=$(tput setaf 2)
+#YELLOW=$(tput setaf 3)
+#BLUE=$(tput setaf 4)
+#PINK=$(tput setaf 5)
+#CYAN=$(tput setaf 6)
+#WHITE=$(tput setaf 7)
+#NC=$(tput sgr0)
+
+# Usage example:
+# echo "I ${RED}love${NC} ${GREEN}coding${NC}"
+# ###
+# or with log_message function
+# log_message "error" "Der Text sollte rot sein!"

@@ -1,0 +1,8 @@
+Package: cloud-reflect
+Version: 0.2
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Maintainer: Maximilian Passarello <Mail@MPassarello.de>
+Description: SimDev CloudReflect

@@ -1,1 +1,3 @@
-/config
+/deb/etc/**
+/deb/opt/**
+/release/**
