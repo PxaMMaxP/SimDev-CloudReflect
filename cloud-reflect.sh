@@ -25,7 +25,7 @@ parse_paths() {
     log_message "trace" "Parsed paths: ${PATHS[*]}"
 
     echo "${PATHS[@]}"
-
+}
 
 # Check for necessary commands and paths
 check_requirements() {
