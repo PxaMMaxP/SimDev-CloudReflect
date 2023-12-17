@@ -3,6 +3,8 @@
 SCRIPT_DIR="$( cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )" )" &> /dev/null && pwd )"
 source "${SCRIPT_DIR}/config"
 
+echo "### Start script 'cloud-www-sync' Version 0.1 ###"
+
 # Funktion zum Synchronisieren von Inhalten
 sync_content() {
     local source_path="$1"
@@ -45,3 +47,5 @@ monitor_and_sync() {
 
 # Hauptteil des Skripts
 monitor_and_sync
+
+echo "### End script 'cloud-www-sync' ###"
