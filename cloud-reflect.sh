@@ -2,6 +2,7 @@
 
 # Determine the script's directory
 SCRIPT_DIR="$( cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )" )" &> /dev/null && pwd )"
+LOCK_FILE="/tmp/${APP_NAME}-nc.lock"
 source "${SCRIPT_DIR}/logging"
 source "${SCRIPT_DIR}/config"
 source "${SCRIPT_DIR}/version"
@@ -9,13 +10,26 @@ source "${SCRIPT_DIR}/version"
 # Cleanup actions for script termination
 cleanup() {
     log_message "info" "Script is being terminated, performing cleanup..."
-    # (Insert cleanup actions here)
-	
+	release_lock
 	log_message "info" "### End ${APP_NAME} Version ${VERSION} ###"
 }
 
 # Trap signals for cleanup
 trap cleanup SIGINT SIGTERM
+
+acquire_lock() {
+    if [ -e "$LOCK_FILE" ]; then
+        log_message "trace" "Lock file already exists: ${LOCK_FILE}."
+    else
+        touch "$LOCK_FILE"
+		log_message "trace" "Lock file acquire: ${LOCK_FILE}."
+    fi
+}
+
+release_lock() {
+    rm -f "$LOCK_FILE"
+	log_message "trace" "Lock file released: ${LOCK_FILE}."
+}
 
 # Parse sync pairs from configuration
 parse_paths() {
@@ -36,7 +50,7 @@ parse_paths() {
 # Check for necessary commands and paths
 check_requirements() {
     local error_code=0
-
+	
     # Check if Docker command exists
     if ! command -v docker &> /dev/null; then
         log_message "error" "Docker command not found."
@@ -136,9 +150,9 @@ monitor_and_sync() {
     for pair in "${SYNC_PAIRS[@]}"; do
         (
             parse_paths "$pair"
-			SOURCE_PATH="${PARSED_SOURCE_PATH}"
-			TARGET_PATH="${PARSED_TARGET_PATH}"
-			NEXTCLOUD_PATH="${PARSED_NEXTCLOUD_PATH}"
+            SOURCE_PATH="${PARSED_SOURCE_PATH}"
+            TARGET_PATH="${PARSED_TARGET_PATH}"
+            NEXTCLOUD_PATH="${PARSED_NEXTCLOUD_PATH}"
 
             while true; do
                 # Wait for file changes in source and target directories
@@ -152,15 +166,26 @@ monitor_and_sync() {
                 # Perform synchronization
                 sync_content "$SOURCE_PATH" "$TARGET_PATH"
                 
-				# Execute the scanning of new or changed files by Nextcloud.
-				if docker_output=$(docker exec --user $DOCKER_USERNAME $DOCKER_CONTAINER_NAME php occ files:scan --path="$NEXTCLOUD_PATH" 2>&1); then
-                    log_message "trace" "Docker command success: $docker_output"
+                # Wait for lock to be released
+                while [ -e "$LOCK_FILE" ]; do
+					log_message "trace" "Wait to acquire lock."
+                    sleep 1
+                done
+
+                # Acquire lock and execute the scanning of new or changed files by Nextcloud
+                acquire_lock
+                if [ $? -eq 0 ]; then
+                    if docker_output=$(docker exec --user $DOCKER_USERNAME $DOCKER_CONTAINER_NAME php occ files:scan --path="$NEXTCLOUD_PATH" 2>&1); then
+                        log_message "trace" "Docker command success: $docker_output"
+                    else
+                        log_message "error" "Docker command failed: $docker_output"
+                    fi
+                    release_lock
                 else
-                    log_message "error" "Docker command failed: $docker_output"
-                    continue
+                    log_message "error" "Failed to acquire lock."
                 fi
-				
-				# Update permissions
+
+                # Update permissions
                 update_permissions "$TARGET_PATH"
             done
         ) &
@@ -168,8 +193,10 @@ monitor_and_sync() {
     wait
 }
 
+
 # Log start of script and check requirements
 log_message "info" "### Start script ${APP_NAME} Version ${VERSION} ###"
+release_lock
 check_requirements
 log_message "info" "### All requirements fulfilled. Start background watcher... ###"
 monitor_and_sync
