@@ -66,7 +66,7 @@ EOF
     # Den Service nicht aktivieren
     systemctl enable "${SERVICE_NAME}"
 
-    echo "Installation completed. Service created but and enabled."
+    echo "Installation completed. Service created and enabled."
 }
 
 # Uninstall-Funktion
