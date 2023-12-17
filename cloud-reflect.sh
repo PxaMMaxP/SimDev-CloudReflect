@@ -61,7 +61,7 @@ check_requirements() {
         read -ra parsed_paths <<< "$(parse_paths "$pair")"
         SOURCE_PATH="${parsed_paths[0]}${parsed_paths[1]}"
         TARGET_PATH="${parsed_paths[2]}"
-
+		echo "TEST"
         local path_error=0
         if [ ! -d "$SOURCE_PATH" ]; then
             log_message "error" "Source directory '$SOURCE_PATH' does not exist."
