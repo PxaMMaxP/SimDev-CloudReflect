@@ -19,6 +19,10 @@ trap cleanup SIGINT SIGTERM
 
 # Parse sync pairs from configuration
 parse_paths() {
+	PARSED_SOURCE_PATH=""
+    PARSED_TARGET_PATH=""
+    PARSED_NEXTCLOUD_PATH=""
+
     local pair="$1"
     IFS=';' read -ra PATHS <<< "$pair"
 
