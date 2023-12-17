@@ -49,6 +49,7 @@ PartOf=docker.service
 [Service]
 ExecStart=${BIN_DIR}/cloud-www-sync.sh
 Restart=on-failure
+User=root
 
 [Install]
 WantedBy=multi-user.target
