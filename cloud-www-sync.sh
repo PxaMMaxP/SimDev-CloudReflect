@@ -17,7 +17,7 @@ update_permissions() {
     local path="$1"
 
     # Berechtigungen und Besitzer ändern
-    find "$path" -exec chmod 0664 {} \;
+    find "$path" -exec chmod 0766 {} \;
     chown -R 33:33 "$path"
 }
 
