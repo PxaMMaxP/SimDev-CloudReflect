@@ -1,7 +1,4 @@
 #!/bin/bash
 set -e
 
-systemctl disable cloudreflect.service
-systemctl stop cloudreflect.service
-
 systemctl daemon-reload
