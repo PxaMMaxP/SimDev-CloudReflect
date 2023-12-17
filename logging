@@ -4,7 +4,7 @@ LOG_LEVEL="info" # Default log level setting
 log_message() {
     local level="$1"
     local message="$2"
-	echo "Calling log_message with level: $level and message: $message"
+
     case "$level" in
         "trace")
 			if [[ "$LOG_LEVEL" == "trace" ]]; then
