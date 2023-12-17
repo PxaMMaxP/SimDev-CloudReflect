@@ -32,7 +32,7 @@ BLUE=$(tput setaf 4)
 PINK=$(tput setaf 5)
 CYAN=$(tput setaf 6)
 WHITE=$(tput setaf 7)
-NC=$(tput setaf 0)
+NC=$(tput sgr0)
 
 # Usage example:
 # echo "I ${RED}love${NC} ${GREEN}coding${NC}"
