@@ -11,7 +11,7 @@ cleanup() {
     log_message "info" "Script is being terminated, performing cleanup..."
     # (Insert cleanup actions here)
 	
-	log_message "info" "### Start ${APP_NAME} Version ${VERSION} ###"
+	log_message "info" "### End ${APP_NAME} Version ${VERSION} ###"
 }
 
 # Trap signals for cleanup
@@ -24,7 +24,9 @@ parse_paths() {
 
     log_message "trace" "Parsed paths: ${PATHS[*]}"
 
-    echo "${PATHS[@]}"
+    PARSED_SOURCE_PATH="${PATHS[0]}"
+    PARSED_TARGET_PATH="${PATHS[1]}"
+    PARSED_NEXTCLOUD_PATH="${PATHS[2]}"
 }
 
 # Check for necessary commands and paths
@@ -58,9 +60,9 @@ check_requirements() {
     # Check if source and target paths exist
     local pair_num=0
     for pair in "${SYNC_PAIRS[@]}"; do
-        read -ra parsed_paths <<< "$(parse_paths "$pair")"
-        SOURCE_PATH="${parsed_paths[0]}${parsed_paths[1]}"
-        TARGET_PATH="${parsed_paths[2]}"
+        parse_paths "$pair"
+		SOURCE_PATH="${PARSED_SOURCE_PATH}"
+		TARGET_PATH="${PARSED_TARGET_PATH}"
 
         local path_error=0
         if [ ! -d "$SOURCE_PATH" ]; then
@@ -129,10 +131,10 @@ update_permissions() {
 monitor_and_sync() {
     for pair in "${SYNC_PAIRS[@]}"; do
         (
-            read -ra parsed_paths <<< "$(parse_paths "$pair")"
-            SOURCE_PATH="${parsed_paths[0]}${parsed_paths[1]}"
-            TARGET_PATH="${parsed_paths[2]}"
-            NEXTCLOUD_PATH="${parsed_paths[1]}"
+            parse_paths "$pair"
+			SOURCE_PATH="${PARSED_SOURCE_PATH}"
+			TARGET_PATH="${PARSED_TARGET_PATH}"
+			NEXTCLOUD_PATH="${PARSED_NEXTCLOUD_PATH}"
 
             while true; do
                 # Wait for file changes in source and target directories
