@@ -1,5 +1,15 @@
-# Konfiguration der Pfade
+# systemd service name
 SERVICE_NAME=""
-NEXTCLOUD_DATA_PATH=""
-NEXTCLOUD_PATH=""
-CONTAINER_PATH=""
+LOG_LEVEL="info" # Possible values: info, error, trace
+DOCKER_CONTAINER_NAME="nextcloud-app"
+DOCKER_USERNAME="www-data"
+# SYNC_PAIRS Konfiguration:
+# Jedes Element im SYNC_PAIRS Array besteht aus drei Pfaden, getrennt durch Semikolons:
+# 1. Der Basispfad zu den Daten (wird mit dem internen Nextcloud-Pfad kombiniert, um den vollständigen Quellpfad zu bilden).
+# 2. Der interne Nextcloud-Pfad (ergänzt den Basispfad, um den vollständigen Quellpfad zu bilden).
+# 3. Der Ziel-Synchronisationspfad.
+# Format: (Basispfad; Interner Nextcloud-Pfad) entspricht Quell-Synchronisationspfad; Ziel-Synchronisationspfad
+SYNC_PAIRS=(
+    "/mnt/SimDev201/plain/docker/cloud_mpassarello/app/data;/MaxP/files/Privat/Dokumente/Projekte/Ressourcen/Der Zaunpfahl/content;/mnt/SimDev201/plain/docker/der_zaunpfahl/www/content"
+    "/mnt/SimDev201/plain/docker/cloud_mpassarello/app/data;/MaxP/files/Privat/Dokumente/Projekte/Ressourcen/Der Zaunpfahl/assets;/mnt/SimDev201/plain/docker/der_zaunpfahl/www/assets"
+)
