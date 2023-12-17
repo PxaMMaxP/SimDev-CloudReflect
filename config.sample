@@ -1,0 +1,5 @@
+# Konfiguration der Pfade
+SERVICE_NAME=""
+NEXTCLOUD_DATA_PATH=""
+NEXTCLOUD_PATH=""
+CONTAINER_PATH=""
