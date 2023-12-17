@@ -1,0 +1,12 @@
+[Unit]
+Description=${APP_NAME} Sync Service
+After=docker.service network.target
+PartOf=docker.service
+
+[Service]
+ExecStart=/opt/cloudreflect/cloudreflect.sh
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target

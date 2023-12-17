@@ -3,8 +3,8 @@
 # Determine the script's directory
 SCRIPT_DIR="$( cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )" )" &> /dev/null && pwd )"
 source "${SCRIPT_DIR}/logging"
-source "${SCRIPT_DIR}/config"
 source "${SCRIPT_DIR}/version"
+source "/etc/cloudreflect/config"
 LOCK_FILE="/tmp/${APP_NAME}-nc.lock"
 
 # Cleanup actions for script termination
