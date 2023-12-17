@@ -5,4 +5,15 @@ Priority: optional
 Architecture: all
 Essential: no
 Maintainer: Maximilian Passarello <Mail@MPassarello.de>
+Depends: docker, unison, inotify-tools
 Description: SimDev CloudReflect
+ SimDev CloudReflect is an advanced cloud management tool designed
+ to provide users with seamless and efficient management of cloud resources.
+ Featuring a user-friendly interface, CloudReflect allows for easy
+ monitoring and management of cloud infrastructure, offering
+ capabilities such as resource allocation, performance tracking,
+ and automated scaling. Ideal for individual 
+ users, CloudReflect aims to simplify cloud operations while
+ ensuring high availability and optimized resource utilization.
+ Its lightweight architecture and compatibility with various cloud
+ platforms make it an indispensable tool for modern cloud computing.

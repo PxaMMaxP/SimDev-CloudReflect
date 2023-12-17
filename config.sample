@@ -1,5 +1,3 @@
-# Systemd service name
-SERVICE_NAME=""
 LOG_LEVEL="info" # Possible values: info, error, trace
 DOCKER_CONTAINER_NAME="nextcloud-app"
 DOCKER_USERNAME="www-data"
