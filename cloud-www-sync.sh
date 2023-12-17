@@ -25,7 +25,10 @@ update_permissions() {
 monitor_and_sync() {
     while true; do
         # Warten auf Dateiänderungen
-        inotifywait -r -e modify,create,delete,move "${NEXTCLOUD_DATA_PATH}${NEXTCLOUD_PATH}"
+        inotifywait -r -e modify,create,delete,move \
+            "${NEXTCLOUD_DATA_PATH}${NEXTCLOUD_PATH}" \
+            "${CONTAINER_PATH}/content" \
+            "${CONTAINER_PATH}/assets"
 
         # Synchronisation und Aktualisierung
         sync_content "${NEXTCLOUD_DATA_PATH}${NEXTCLOUD_PATH}/content" "${CONTAINER_PATH}/content"
