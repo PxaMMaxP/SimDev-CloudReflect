@@ -20,11 +20,14 @@ trap cleanup SIGINT SIGTERM
 acquire_lock() {
     if [ -e "$LOCK_FILE" ]; then
         log_message "trace" "Lock file already exists: ${LOCK_FILE}."
+        return 1 # Sperre existiert bereits, Rückgabewert 1 für Fehler
     else
         touch "$LOCK_FILE"
-		log_message "trace" "Lock file acquire: ${LOCK_FILE}."
+        log_message "trace" "Lock file acquired: ${LOCK_FILE}."
+        return 0 # Sperre erfolgreich erstellt, Rückgabewert 0 für Erfolg
     fi
 }
+
 
 release_lock() {
     rm -f "$LOCK_FILE"
@@ -166,24 +169,23 @@ monitor_and_sync() {
                 # Perform synchronization
                 sync_content "$SOURCE_PATH" "$TARGET_PATH"
                 
-                # Wait for lock to be released
-                while [ -e "$LOCK_FILE" ]; do
-					log_message "trace" "Wait to acquire lock."
-                    sleep 1
-                done
-
-                # Acquire lock and execute the scanning of new or changed files by Nextcloud
-                acquire_lock
-                if [ $? -eq 0 ]; then
-                    if docker_output=$(docker exec --user $DOCKER_USERNAME $DOCKER_CONTAINER_NAME php occ files:scan --path="$NEXTCLOUD_PATH" 2>&1); then
-                        log_message "trace" "Docker command success: $docker_output"
+                # Attempt to acquire lock
+                while true; do
+                    acquire_lock
+                    if [ $? -eq 0 ]; then
+                        # If lock acquired, execute the Docker command
+                        if docker_output=$(docker exec --user $DOCKER_USERNAME $DOCKER_CONTAINER_NAME php occ files:scan --path="$NEXTCLOUD_PATH" 2>&1); then
+                            log_message "trace" "Docker command success: $docker_output"
+                        else
+                            log_message "error" "Docker command failed: $docker_output"
+                        fi
+                        release_lock
+                        break # Break out of the lock waiting loop
                     else
-                        log_message "error" "Docker command failed: $docker_output"
+                        # If lock not acquired, wait and try again
+                        sleep 1
                     fi
-                    release_lock
-                else
-                    log_message "error" "Failed to acquire lock."
-                fi
+                done
 
                 # Update permissions
                 update_permissions "$TARGET_PATH"
@@ -192,6 +194,7 @@ monitor_and_sync() {
     done
     wait
 }
+
 
 
 # Log start of script and check requirements
