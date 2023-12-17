@@ -1,7 +1,6 @@
 #!/bin/bash
 
 SCRIPT_DIR="$( cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )" )" &> /dev/null && pwd )"
-echo "${SCRIPT_DIR}"
 source "${SCRIPT_DIR}/config"
 
 # Funktion zum Synchronisieren von Inhalten
