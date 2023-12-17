@@ -27,10 +27,10 @@ parse_paths() {
     IFS=';' read -ra PATHS <<< "$pair"
 
     log_message "trace" "Parsed paths: ${PATHS[*]}"
-
-    PARSED_SOURCE_PATH="${PATHS[0]}"
-    PARSED_TARGET_PATH="${PATHS[1]}"
-    PARSED_NEXTCLOUD_PATH="${PATHS[2]}"
+	
+    PARSED_SOURCE_PATH="${PATHS[0]}${PATHS[1]}"
+    PARSED_TARGET_PATH="${PATHS[2]}"
+    PARSED_NEXTCLOUD_PATH="${PATHS[1]}"
 }
 
 # Check for necessary commands and paths
