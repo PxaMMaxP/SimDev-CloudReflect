@@ -27,7 +27,7 @@ install() {
     echo "Starting installation..."
 
     # Service-Name abfragen
-    read -p "Enter the name for the systemd service (e.g., cloud-sync.service): " SERVICE_NAME
+    read -p "Enter the name for the systemd service (e.g., cloud-sync): " SERVICE_NAME
 
     # Update SERVICE_NAME in der Konfigurationsdatei
 	if grep -q "SERVICE_NAME=" "${CONFIG_FILE}"; then
@@ -59,11 +59,14 @@ EOF
 
     # Systemd daemon neu laden
     systemctl daemon-reload
+	
+	# Erstellen des symbolischen Links für das Skript
+    ln -sf "${SCRIPT_DIR}/cloud-www-sync.sh" "${BIN_DIR}/cloud-www-sync.sh"
 
     # Den Service nicht aktivieren
     systemctl enable "${SERVICE_NAME}"
 
-    echo "Installation completed. Service created but not enabled."
+    echo "Installation completed. Service created but and enabled."
 }
 
 # Uninstall-Funktion
