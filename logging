@@ -8,17 +8,17 @@ log_message() {
     case "$level" in
         "trace")
 			if [[ "$LOG_LEVEL" == "trace" ]]; then
-                echo "${PINK}[TRACE] $message${NC}"  # Trace messages are logged normally
+                echo "[TRACE] $message"  # Trace messages are logged normally
             fi
             ;;
 		"info")
 			if [[ "$LOG_LEVEL" == "info" || "$LOG_LEVEL" == "trace" ]]; then
-                echo "${GREEN}[INFO] $message${NC}"  # Info messages are logged normally
+                echo "[INFO] $message"  # Info messages are logged normally
             fi
             ;;
         "error")
 			if [[ "$LOG_LEVEL" == "info" || "$LOG_LEVEL" == "error" || "$LOG_LEVEL" == "trace" ]]; then
-                >&2 echo "${RED}[ERROR] $message${NC}"  # Error messages are sent to stderr
+                >&2 echo "[ERROR] $message$"  # Error messages are sent to stderr
             fi
             ;;
     esac
