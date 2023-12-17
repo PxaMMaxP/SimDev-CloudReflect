@@ -89,6 +89,12 @@ uninstall() {
     echo "Uninstallation completed."
 }
 
+# Überprüfen, ob Argumente übergeben wurden
+if [ "$#" -eq 0 ]; then
+    show_help
+    exit 0
+fi
+
 # Argumente verarbeiten
 while [ "$#" -gt 0 ]; do
     case "$1" in
