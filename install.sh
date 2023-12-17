@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Standardpfade
-SCRIPT_DIR="$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 CONFIG_FILE="${SCRIPT_DIR}/config"
 BIN_DIR="/usr/local/bin"
 
